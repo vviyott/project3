@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 from datetime import datetime
-from supabase import create_client, Client
+from supabase import create_client
 import numpy as np
 from openai import OpenAI
 import dotenv
