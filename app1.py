@@ -116,7 +116,7 @@ def main():
         sort_options = st.selectbox(
             "정렬:", 
             options=[("최신순", "date"), ("정확도순", "sim")],
-            format_func=lambda x: x[0] # 옵션의 첫번째 요소를 화면에 표시(최신순, 정확도순)
+            format_func=lambda x: x[1] # 옵션의 첫번째 요소를 화면에 표시(최신순, 정확도순)
         )
         sort_options = sort_options[1]  # date, sim 중 하나를 선택하여 sort_options 에 할당
         
