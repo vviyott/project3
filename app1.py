@@ -86,7 +86,7 @@ def main():
     st.set_page_config(page_title="네이버 API 검색", layout="wide") # layout의 형태를 wide 로 설정정
     
     # 제목 및 설명
-    st.title("노동자로 살건인가? 자본가로 살것인가? 네이버 검색 API")
+    st.title("노동자로 살것인가? 자본가로 살것인가? 네이버 검색 API")
     st.markdown("---")
     
     # API 키 입력 (기본값 설정, 실제 앱에서는 숨기는 것이 좋음)
