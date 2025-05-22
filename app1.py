@@ -109,7 +109,7 @@ def main():
         )
         search_type = search_type[1]  # news, blog, image, shop 중 하나를 선택하여 실제값 추출
         
-        query = st.text_input("검색어:", value="안성탕면")
+        query = st.text_input("검색어:", value="빙그레 바나나 우유")
         count = st.slider("결과 수:", min_value=1, max_value=100, value=50)
     
     with col2: # 두번째 열의 검색 옵션을 설정
