@@ -10,3 +10,5 @@ plotly>=5.8.0
 scikit-learn>=1.0.0
 pillow>=9.0.0
 sentence-transformers
+torch
+transformers
