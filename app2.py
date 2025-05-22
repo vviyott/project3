@@ -25,11 +25,14 @@ def load_embedding_model():
     # 1536차원을 생성하는 더 큰 모델 사용
     return SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
+# 모델 로드 (이 부분이 누락되어 있었습니다!)
+embedding_model = load_embedding_model()
+
 def generate_embedding(text):
     """텍스트에서 임베딩 생성 (1536차원)"""
     if not text or text.strip() == "":
         # 빈 텍스트인 경우 기본 임베딩 반환
-        return [0.0] * 768  # all-mpnet-base-v2는 768차원
+        return [0.0] * 1536  # 1536차원으로 수정
     
     embedding = embedding_model.encode(text)
     # 1536차원으로 패딩 또는 확장
@@ -186,8 +189,8 @@ def process_json_file(file_path, collection_name=None, source_type=None):
 # Streamlit 앱 UI
 st.title("네이버 JSON 파일을 Supabase에 저장하기")
 
-# 모델 정보 표시
-st.sidebar.info("🆓 무료 임베딩 모델 사용 중: paraphrase-multilingual-MiniLM-L12-v2")
+# 모델 정보 표시 (모델명 수정)
+st.sidebar.info("🆓 무료 임베딩 모델 사용 중: all-mpnet-base-v2")
 
 uploaded_file = st.file_uploader("JSON 파일 업로드", type=['json'])
 
