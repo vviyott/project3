@@ -1,9 +1,11 @@
+import ast
 import streamlit as st
 import os
 import json
 import numpy as np
 from supabase import create_client
 from openai import OpenAI
+
 
 # 페이지 구성
 st.set_page_config(page_title="전자담배 시맨틱 검색", layout="wide")
