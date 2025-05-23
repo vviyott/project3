@@ -64,6 +64,7 @@ def generate_embedding(text):
 
 # semantic_search(시멘틱 검색어, 출력결과 수, 유사도 임계값(=임계치))
 # match_documents : supbase 홈페이지의 SQL 에디터에서 만든 "벡터 검색 함수"
+# semantic_search(시멘틱 검색어, 출력 결과 수, 유사도 임계값 )
 def semantic_search(query_text, limit=10, match_threshold=0.5):
     """시맨틱 검색 수행"""
     try:
@@ -93,21 +94,51 @@ def semantic_search(query_text, limit=10, match_threshold=0.5):
         
         st.sidebar.info(f"총 {len(result.data)}개의 문서에서 유사도 계산 중...")
         results = []
+        
         for item in result.data:
             if 'embedding' in item and item['embedding'] is not None:
-                # 코사인 유사도 계산
-                item_embedding = item['embedding']
-                similarity = np.dot(query_embedding, item_embedding) / (
-                    np.linalg.norm(query_embedding) * np.linalg.norm(item_embedding)
-                )
+                try:
+                    # 임베딩 데이터 타입 확인 및 변환
+                    item_embedding = item['embedding']
+                    
+                    # 문자열인 경우 리스트로 변환
+                    if isinstance(item_embedding, str):
+                        try:
+                            # JSON 문자열인 경우
+                            item_embedding = json.loads(item_embedding)
+                        except json.JSONDecodeError:
+                            # eval을 사용 (안전하지 않지만 임시 방편)
+                            try:
+                                item_embedding = eval(item_embedding)
+                            except:
+                                st.warning(f"임베딩 데이터 변환 실패: {item['id']}")
+                                continue
+                    
+                    # NumPy 배열로 변환
+                    item_embedding = np.array(item_embedding, dtype=np.float32)
+                    query_embedding_np = np.array(query_embedding, dtype=np.float32)
+                    
+                    # 벡터 차원 확인
+                    if len(item_embedding) != len(query_embedding_np):
+                        st.warning(f"임베딩 차원 불일치: {item['id']}")
+                        continue
+                    
+                    # 코사인 유사도 계산
+                    similarity = np.dot(query_embedding_np, item_embedding) / (
+                        np.linalg.norm(query_embedding_np) * np.linalg.norm(item_embedding)
+                    )
+                    
+                    if similarity > match_threshold:
+                        results.append({
+                            'id': item['id'],
+                            'content': item['content'],
+                            'metadata': item['metadata'],
+                            'similarity': float(similarity)
+                        })
                 
-                if similarity > match_threshold:
-                    results.append({
-                        'id': item['id'],
-                        'content': item['content'],
-                        'metadata': item['metadata'],
-                        'similarity': float(similarity)
-                    })
+                except Exception as embedding_error:
+                    st.warning(f"임베딩 처리 오류 (ID: {item.get('id', 'unknown')}): {str(embedding_error)}")
+                    continue
         
         # 유사도 기준으로 정렬하고 상위 결과 반환
         results = sorted(results, key=lambda x: x['similarity'], reverse=True)[:limit]
@@ -117,7 +148,7 @@ def semantic_search(query_text, limit=10, match_threshold=0.5):
         st.error(f"시맨틱 검색 중 오류 발생: {str(e)}")
         raise
 
-#### streamlit 화면 설정정
+#### streamlit 화면 설정
 # 메인 UI
 st.title("전자담배 블로그 시맨틱 검색")
 st.write("Supabase 벡터 데이터베이스에 저장된 전자담배 관련 블로그 데이터를 시맨틱 검색합니다.")
