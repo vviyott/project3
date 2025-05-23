@@ -1,4 +1,4 @@
-# 필요한 라이브러리 임포트
+ # 필요한 라이브러리 임포트
 import streamlit as st
 import os
 import json
@@ -17,16 +17,15 @@ import time
 # 페이지 구성
 st.set_page_config(page_title="스마트 쇼핑 파인더", layout="wide")
 
-# 네이버 API 클라이언트 ID와 시크릿
-NAVER_CLIENT_ID = "qUdRFUYQv27dI6GZr4Wz"
-NAVER_CLIENT_SECRET = "HWYWOFBEYH"
-
 # Streamlit에서 실행 중인지 확인하고 secrets 가져오기
 try:
     # Streamlit Cloud 환경에서는 st.secrets 사용
     supabase_url = st.secrets["SUPABASE_URL"]
     supabase_key = st.secrets["SUPABASE_KEY"]
     openai_api_key = st.secrets["OPENAI_API_KEY"]
+    NAVER_CLIENT_ID = st.secrets["NAVER_CLIENT_ID"]
+    NAVER_CLIENT_SECRET = st.secrets["NAVER_CLIENT_SECRET"]
+
 except Exception as e:
     # 로컬 환경에서는 환경 변수 사용
     try:
