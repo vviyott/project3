@@ -120,7 +120,7 @@ st.write("Supabase 벡터 데이터베이스에 저장된 전자담배 관련 �
 st.sidebar.title("검색 설정")
 
 # 검색 입력
-query = st.text_input("검색어 입력", value="액상형 전자담배배", help="검색할 키워드나 문장을 입력하세요")
+query = st.text_input("검색어 입력", value="액상형 전자담배", help="검색할 키워드나 문장을 입력하세요")
 
 col1, col2 = st.columns(2)
 with col1:
